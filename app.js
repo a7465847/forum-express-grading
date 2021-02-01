@@ -1,9 +1,13 @@
 const express = require('express')
+const handlebars = require('express-handlebars')
 const app = express()
-const port = 3000
+const PORT = 3000
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+app.engine('handlebars', handlebars({ defaultLayout: 'main' })) 
+app.set('view engine', 'handlebars')
+
+app.listen(PORT, () => {
+  console.log(`Express is running on http://localhost:${PORT}`)
 })
 
 require('./routes')(app)
