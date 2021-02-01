@@ -1,5 +1,6 @@
 const express = require('express')
 const handlebars = require('express-handlebars')
+const db = require('./models')
 const app = express()
 const PORT = 3000
 
