@@ -33,7 +33,7 @@ const adminController = {
   },
   //瀏覽一筆資料頁面
   getRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id, {raw:true}).then(restaurant => {
+    return Restaurant.findByPk(req.params.id, { raw: true }).then(restaurant => {
       return res.render('admin/restaurant', {
         restaurant: restaurant
       })
@@ -41,9 +41,31 @@ const adminController = {
   },
   // 編輯一筆資料頁面
   editRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id, {raw:true}).then(restaurant => {
-      return res.render('admin/create', { restaurant: restaurant } )
+    return Restaurant.findByPk(req.params.id, { raw: true }).then(restaurant => {
+      return res.render('admin/create', { restaurant: restaurant })
     })
+  },
+  // 送出一筆編輯資料
+  putRestaurant: (req, res) => {
+    if (!req.body.name) {
+      req.flash('error_messages', "name didn't exist")
+      return res.redirect('back')
+    }
+
+    return Restaurant.findByPk(req.params.id)
+      .then((restaurant) => {
+        restaurant.update({
+          name: req.body.name,
+          tel: req.body.tel,
+          address: req.body.address,
+          opening_hours: req.body.opening_hours,
+          description: req.body.description
+        })
+          .then((restaurant) => {
+            req.flash('success_messages', 'restaurant was successfully to update')
+            res.redirect('/admin/restaurants')
+          })
+      })
   }
 }
 module.exports = adminController 
