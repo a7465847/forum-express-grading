@@ -3,14 +3,17 @@ const db = require('../models')
 const Restaurant = db.Restaurant
 
 const adminController = {
+  // 瀏覽全部資料頁面
   getRestaurants: (req, res) => {
     return Restaurant.findAll({ raw: true }).then(restaurants => {
       return res.render('admin/restaurants', { restaurants })
     })
   },
+  // 新增資料頁面
   createRestaurant: (req, res) => {
     return res.render('admin/create')
   },
+  // 送出一筆新增資料
   postRestaurant: (req, res) => {
     if (!req.body.name) {
       req.flash('error_messages', "name didn't exist")
@@ -28,11 +31,18 @@ const adminController = {
         res.redirect('/admin/restaurants')
       })
   },
+  //瀏覽一筆資料頁面
   getRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id, {raw:true}).then(restaurant => {
       return res.render('admin/restaurant', {
         restaurant: restaurant
       })
+    })
+  },
+  // 編輯一筆資料頁面
+  editRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id, {raw:true}).then(restaurant => {
+      return res.render('admin/create', { restaurant: restaurant } )
     })
   }
 }
