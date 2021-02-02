@@ -11,6 +11,7 @@ const PORT = 3000
 app.engine('handlebars', handlebars({ defaultLayout: 'main' })) 
 app.set('view engine', 'handlebars')
 app.use(methodOverride('_method'))
+app.use('/upload', express.static(__dirname + '/upload'))
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(passport.initialize())
