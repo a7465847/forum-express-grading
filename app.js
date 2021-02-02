@@ -10,14 +10,13 @@ const port = process.env.PORT || 3000
 
 app.engine('handlebars', handlebars({ defaultLayout: 'main' })) 
 app.set('view engine', 'handlebars')
-app.use(methodOverride('_method'))
-app.use('/upload', express.static(__dirname + '/upload'))
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
-
+app.use(methodOverride('_method'))
+app.use('/upload', express.static(__dirname + '/upload'))
 
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
@@ -26,8 +25,8 @@ app.use((req, res, next) => {
   next()
 })
 
-app.listen(PORT, () => {
-  console.log(`Express is running on http://localhost:${PORT}`)
+app.listen(port, () => {
+  console.log(`Express is running on http://localhost:${port}`)
 })
 
 require('./routes')(app, passport)
