@@ -1,11 +1,27 @@
-const app = require('../app')
 const db = require('../models')
 const Restaurant = db.Restaurant
+const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
-const fs = require('fs')
 
 const adminController = {
+  // 進入管理員頁面
+  getUser: (req, res) => {
+    console.log('進入管理員頁面', req.user)
+    return User.findAll({ raw: true }).then(users => {
+      return res.render('admin/users', { users })
+    })
+  },
+  // 送出編輯管理員資料
+  toggleAdmin: (req, res) => {
+    return User.findByPk(req.params.id)
+    .then(users => users.update({ isAdmin: !users.isAdmin }))
+    .then((restaurant) => {
+      req.flash('success_messages', 'user was successfully to update')
+      res.redirect('/admin/users')
+    })
+
+  },
   // 瀏覽全部資料頁面
   getRestaurants: (req, res) => {
     return Restaurant.findAll({ raw: true }).then(restaurants => {

@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     opening_hours: DataTypes.STRING,
     description: DataTypes.TEXT,
     image: DataTypes.STRING,
-    // CategoryId: DataTypes.INTEGER  // 更新欄位清單
+    CategoryId: DataTypes.INTEGER  // 更新欄位清單
   }, {
     sequelize,
     modelName: 'Restaurant'
