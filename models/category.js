@@ -3,23 +3,16 @@ const {
   Model
 } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  class Restaurant extends Model {
+  class Category extends Model {
     static associate (models) {
-      // define association here
-      Restaurant.belongsTo(models.Category)  // 加入關聯設定
+      Category.hasMany(models.Restaurant)
     }
   };
-  Restaurant.init({
-    name: DataTypes.STRING,
-    tel: DataTypes.STRING,
-    address: DataTypes.STRING,
-    opening_hours: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    image: DataTypes.STRING,
-    CategoryId: DataTypes.INTEGER  // 更新欄位清單
+  Category.init({
+    name: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Restaurant'
+    modelName: 'Category'
   })
-  return Restaurant
-}
+  return Category
+};

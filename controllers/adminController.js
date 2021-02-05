@@ -1,5 +1,6 @@
 const db = require('../models')
 const Restaurant = db.Restaurant
+const Category = db.Category
 const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -15,16 +16,20 @@ const adminController = {
   // 送出編輯管理員資料
   toggleAdmin: (req, res) => {
     return User.findByPk(req.params.id)
-    .then(users => users.update({ isAdmin: !users.isAdmin }))
-    .then((restaurant) => {
-      req.flash('success_messages', 'user was successfully to update')
-      res.redirect('/admin/users')
-    })
+      .then(users => users.update({ isAdmin: !users.isAdmin }))
+      .then((restaurant) => {
+        req.flash('success_messages', 'user was successfully to update')
+        res.redirect('/admin/users')
+      })
 
   },
   // 瀏覽全部資料頁面
   getRestaurants: (req, res) => {
-    return Restaurant.findAll({ raw: true }).then(restaurants => {
+    return Restaurant.findAll({
+      raw: true,
+      nest: true,
+      include: [Category]
+    }).then(restaurants => {
       return res.render('admin/restaurants', { restaurants })
     })
   },
@@ -72,9 +77,14 @@ const adminController = {
   },
   //進入瀏覽一筆資料頁面
   getRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id, { raw: true }).then(restaurant => {
+    return Restaurant.findByPk(
+      req.params.id, {
+      include: [Category]
+    }
+    ).then(restaurant => {
+      console.log(restaurant)
       return res.render('admin/restaurant', {
-        restaurant: restaurant
+        restaurant: restaurant.toJSON()
       })
     })
   },
