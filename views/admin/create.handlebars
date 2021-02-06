@@ -1,3 +1,4 @@
+
 {{#if restaurant}}
 <form action="/admin/restaurants/{{restaurant.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
   {{else}}
@@ -13,7 +14,7 @@
       <label for="categoryId">Category</label>
       <select class="form-control" id="categoryId" name="categoryId">
         {{#each categories}}
-        <option value="{{this.id}}" {{#if this.id===restaurant.CategoryId}} selected {{/if}}>{{this.name}}</option>
+        <option value="{{this.id}}" {{#ifCond this.id ../restaurant.CategoryId}} selected {{/ifCond}}>{{this.name}}</option>
         {{/each}}
       </select>
     </div>

@@ -39,7 +39,6 @@ const adminController = {
       raw: true,
       nest: true
     }).then(categories => {
-      console.log(categories)
       return res.render('admin/create', {
         categories: categories
       })
