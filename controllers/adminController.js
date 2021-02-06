@@ -1,6 +1,9 @@
 const db = require('../models')
 const Restaurant = db.Restaurant
+<<<<<<< HEAD
 const Category = db.Category
+=======
+>>>>>>> A17
 const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -16,11 +19,19 @@ const adminController = {
   // 送出編輯管理員資料
   toggleAdmin: (req, res) => {
     return User.findByPk(req.params.id)
+<<<<<<< HEAD
       .then(users => users.update({ isAdmin: !users.isAdmin }))
       .then((restaurant) => {
         req.flash('success_messages', 'user was successfully to update')
         res.redirect('/admin/users')
       })
+=======
+    .then(users => users.update({ isAdmin: !users.isAdmin }))
+    .then((restaurant) => {
+      req.flash('success_messages', 'user was successfully to update')
+      res.redirect('/admin/users')
+    })
+>>>>>>> A17
 
   },
   // 瀏覽全部資料頁面
