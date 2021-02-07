@@ -8,7 +8,6 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const adminController = {
   // 進入管理員頁面
   getUser: (req, res) => {
-    console.log('進入管理員頁面', req.user)
     return User.findAll({ raw: true }).then(users => {
       return res.render('admin/users', { users })
     })
@@ -91,7 +90,6 @@ const adminController = {
       include: [Category]
     }
     ).then(restaurant => {
-      console.log(restaurant)
       return res.render('admin/restaurant', {
         restaurant: restaurant.toJSON()
       })
