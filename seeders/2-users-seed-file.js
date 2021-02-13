@@ -1,5 +1,7 @@
 'use strict'
 const bcrypt = require('bcryptjs')
+const faker = require('faker')
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Users', [{
@@ -7,6 +9,7 @@ module.exports = {
       password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
       isAdmin: true,
       name: 'root',
+      image: 'https://i.imgur.com/xMVLVzK.png',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -14,6 +17,7 @@ module.exports = {
       password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
       isAdmin: false,
       name: 'user1',
+      image: 'https://i.imgur.com/xMVLVzK.png',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -21,6 +25,7 @@ module.exports = {
       password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
       isAdmin: false,
       name: 'user2',
+      image: 'https://i.imgur.com/xMVLVzK.png',
       createdAt: new Date(),
       updatedAt: new Date()
     }], {})
