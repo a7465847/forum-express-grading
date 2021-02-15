@@ -23,6 +23,14 @@ module.exports = (app, passport) => {
     res.redirect('/signin')
   }
 
+  const permissionAccess = (req, res, next) => {
+    if (Number(helpers.getUser(req).id) !== Number(req.params.id)) {
+      req.flash('error_messages', '非本人無權限訪問個人資料');
+      return res.redirect(`/users/${req.user.id}`);
+    }
+    return next();
+  };
+
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
@@ -44,8 +52,8 @@ module.exports = (app, passport) => {
   app.post('/comments', authenticated, commentController.postComment)
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
   app.get('/users/:id', authenticated, userController.getUser)
-  app.get('/users/:id/edit', authenticated, userController.editUser)
-  app.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
+  app.get('/users/:id/edit', authenticated, permissionAccess, userController.editUser)
+  app.put('/users/:id', authenticated, permissionAccess, upload.single('image'), userController.putUser)
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
   app.get('/signin', userController.signInPage)
