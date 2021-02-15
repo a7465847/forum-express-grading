@@ -48,41 +48,20 @@ const userController = {
     req.logout()
     res.redirect('/signin')
   },
-  getUser: (req, res) => {
-    return User.findByPk(
-      req.params.id,
-      {
-        include: [
-          { model: Comment, include: [Restaurant] },
-        ]
-      }
-    ).then(async (users) => {
-
-      const restaurants = await users.Comments.map(comment => comment.Restaurant)
-      return res.render('profile', { users: users.toJSON() })
-    })
-  },
   getUser: async (req, res) => {
-    try {
-      const user = await User.findByPk(
-        req.params.id,
-        {
-          include: [
-            { model: Comment, include: [Restaurant] },
-          ]
-        }
-      )
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Comment, include: [Restaurant] }
+      ]
+    }).then(user => {
       const set = new Set()
       const restaurantsFilter = user.toJSON().Comments.filter(item => !set.has(item.Restaurant.id) ? set.add(item.Restaurant.id) : false)
       const restaurants = restaurantsFilter.map(comment => comment.Restaurant)
       return res.render('profile', {
-        user: user.toJSON(),
+        users: user.toJSON(),
         restaurants: restaurants
       })
-
-    } catch (err) {
-      console.log(err)
-    }
+    })
   },
   editUser: (req, res) => {
     return User.findByPk(req.params.id).then(user => {
