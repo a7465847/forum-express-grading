@@ -1,8 +1,10 @@
 const db = require('../models')
 const Restaurant = db.Restaurant
-const Category = db.Category
+const 
+Category = db.Category
 const User = db.User
 const imgur = require('imgur')
+// const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const adminController = {
@@ -52,21 +54,22 @@ const adminController = {
 
     const { file } = req
     if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID);
-      imgur.upload(file.path, (err, img) => {
-        return Restaurant.create({
-          name: req.body.name,
-          tel: req.body.tel,
-          address: req.body.address,
-          opening_hours: req.body.opening_hours,
-          description: req.body.description,
-          image: file ? img.data.link : null,
-          CategoryId: req.body.categoryId
-        }).then((restaurant) => {
-          req.flash('success_messages', 'restaurant was successfully created')
-          return res.redirect('/admin/restaurants')
+      imgur.setClientId(IMGUR_CLIENT_ID)
+      imgur.uploadFile(req.file.path)
+        .then(img => {
+          return Restaurant.create({
+            name: req.body.name,
+            tel: req.body.tel,
+            address: req.body.address,
+            opening_hours: req.body.opening_hours,
+            description: req.body.description,
+            image: file ? img.data.link : null,
+            CategoryId: req.body.categoryId
+          }).then((restaurant) => {
+            req.flash('success_messages', 'restaurant was successfully created')
+            return res.redirect('/admin/restaurants')
+          })
         })
-      })
     }
     else {
       return Restaurant.create({
@@ -103,23 +106,24 @@ const adminController = {
     }).then(categories => {
       return Restaurant.findByPk(req.params.id).then(restaurant => {
         return res.render('admin/create', {
-          categories: categories, 
+          categories: categories,
           restaurant: restaurant.toJSON()
         })
       })
     })
   },
-    // 送出一筆編輯資料
-    putRestaurant: (req, res) => {
-      if (!req.body.name) {
-        req.flash('error_messages', "name didn't exist")
-        return res.redirect('back')
-      }
+  // 送出一筆編輯資料
+  putRestaurant: (req, res) => {
+    if (!req.body.name) {
+      req.flash('error_messages', "name didn't exist")
+      return res.redirect('back')
+    }
 
-      const { file } = req
-      if (file) {
-        imgur.setClientID(IMGUR_CLIENT_ID);
-        imgur.upload(file.path, (err, img) => {
+    const { file } = req
+    if (file) {
+      imgur.setClientId(IMGUR_CLIENT_ID)
+      imgur.uploadFile(req.file.path)
+        .then(img => {
           return Restaurant.findByPk(req.params.id)
             .then((restaurant) => {
               restaurant.update({
@@ -137,36 +141,36 @@ const adminController = {
                 })
             })
         })
-      }
-      else {
-        return Restaurant.findByPk(req.params.id)
-          .then((restaurant) => {
-            restaurant.update({
-              name: req.body.name,
-              tel: req.body.tel,
-              address: req.body.address,
-              opening_hours: req.body.opening_hours,
-              description: req.body.description,
-              image: restaurant.image,
-              CategoryId: req.body.categoryId
+    }
+    else {
+      return Restaurant.findByPk(req.params.id)
+        .then((restaurant) => {
+          restaurant.update({
+            name: req.body.name,
+            tel: req.body.tel,
+            address: req.body.address,
+            opening_hours: req.body.opening_hours,
+            description: req.body.description,
+            image: restaurant.image,
+            CategoryId: req.body.categoryId
+          })
+            .then((restaurant) => {
+              req.flash('success_messages', 'restaurant was successfully to update')
+              res.redirect('/admin/restaurants')
             })
-              .then((restaurant) => {
-                req.flash('success_messages', 'restaurant was successfully to update')
-                res.redirect('/admin/restaurants')
-              })
-          })
-      }
-    },
-      //刪除一筆資料
-      deleteRestaurant: (req, res) => {
-        return Restaurant.findByPk(req.params.id)
+        })
+    }
+  },
+  //刪除一筆資料
+  deleteRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id)
+      .then((restaurant) => {
+        restaurant.destroy()
           .then((restaurant) => {
-            restaurant.destroy()
-              .then((restaurant) => {
-                res.redirect('/admin/restaurants')
-              })
+            res.redirect('/admin/restaurants')
           })
-      }
-
+      })
   }
+
+}
 module.exports = adminController 
