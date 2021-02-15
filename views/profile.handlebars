@@ -1,14 +1,27 @@
 <div class="container mt-5">
   <div class="my-card border p-4 clearfix">
-    <img src="{{ users.image }}" alt="Avatar" class="rounded float-left pr-3" width="200">
-    <h3 class="my-name text-uppercase">{{ users.name }}</h3>
+    <img src="{{ user.image }}" alt="Avatar" class="rounded float-left pr-3" width="200">
+    <h3 class="my-name text-uppercase">{{ user.name }}</h3>
     <div class="experience text-mute">
-      <h6>{{ users.email }}</h6>
-      <a href="/users/{{users.id}}/edit" class="btn btn-link">
+      <h6>{{ user.email }}</h6>
+      <a href="/users/{{user.id}}/edit" class="btn btn-link">
         Edit
       </a>
       <ul class="list-unstyled small">
       </ul>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      {{ restaurants.length }}個 - 已評論餐廳
+    </div>
+    <div class="card-body">
+      {{#each restaurants}}
+      <a href="/restaurants/{{this.id}}" class="btn btn-link">
+        <img src="{{ this.image }}" alt="Avatar" class="rounded float-left pr-3" style="width: 100px; height: 100px;">
+      </a>
+      {{/each}}
     </div>
   </div>
 </div>
