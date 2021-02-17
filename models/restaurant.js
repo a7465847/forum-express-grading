@@ -4,7 +4,7 @@ const {
 } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Restaurant extends Model {
-    static associate (models) {
+    static associate(models) {
       // define association here
       Restaurant.belongsTo(models.Category)
       Restaurant.hasMany(models.Comment)
@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     opening_hours: DataTypes.STRING,
     description: DataTypes.TEXT,
     image: DataTypes.STRING,
-    CategoryId: DataTypes.INTEGER  // 更新欄位清單
+    CategoryId: DataTypes.INTEGER,
+    viewCounts: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Restaurant'
