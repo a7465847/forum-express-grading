@@ -5,6 +5,9 @@
   <li class="nav-item">
     <a class="nav-link" href="/restaurants/feeds">最新動態</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/users/top">美食達人</a>
+  </li>
 </ul>
 <br />
 
@@ -37,15 +40,16 @@
         <div class="d-flex">
           {{#if this.isFavorited }}
           <form action="/favorite/{{this.id}}?_method=DELETE" method="POST"><button type="submit"
-          class="btn btn-danger mr-3">移除最愛</button></form>
+              class="btn btn-danger mr-3">移除最愛</button></form>
           {{else}}
-          <form action="/favorite/{{this.id}}" method="POST"><button type="submit" class="mr-3 btn btn-primary">加到最愛</button>
+          <form action="/favorite/{{this.id}}" method="POST"><button type="submit"
+              class="mr-3 btn btn-primary">加到最愛</button>
           </form>
           {{/if}}
 
           {{#if this.isLike }}
           <form action="/like/{{this.id}}?_method=DELETE" method="POST"><button type="submit"
-          class="btn btn-danger">Unlike</button></form>
+              class="btn btn-danger">Unlike</button></form>
           {{else}}
           <form action="/like/{{this.id}}" method="POST"><button type="submit" class="btn btn-primary">Like</button>
           </form>
