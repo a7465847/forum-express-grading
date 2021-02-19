@@ -7,6 +7,7 @@ const Restaurant = db.Restaurant
 const Like = db.Like
 const imgur = require('imgur')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const helpers = require('../_helpers')
 
 
 const userController = {
@@ -110,11 +111,13 @@ const userController = {
     }
   },
   addFavorite: (req, res) => {
+    console.log('-------已進入addFavorite-------')
     return Favorite.create({
       UserId: req.user.id,
       RestaurantId: req.params.restaurantId
     })
       .then((restaurant) => {
+        console.log('這是addFavorite',restaurant)
         return res.redirect('back')
       })
   },
@@ -133,11 +136,16 @@ const userController = {
       })
   },
   addLike: (req, res) => {
-    return Like.create({
-      UserId: req.user.id,
-      RestaurantId: req.params.restaurantId
+    console.log('-------已進入addLike-------')
+    return Like.findOrCreate({
+      where: { RestaurantId: req.params.restaurantId },
+      defaults: {
+        UserId: helpers.getUser(req).id,
+        RestaurantId: req.params.restaurantId
+      }
     })
       .then((restaurant) => {
+        console.log('這是addLike',restaurant)
         return res.redirect('back')
       })
   },
@@ -148,12 +156,12 @@ const userController = {
         RestaurantId: req.params.restaurantId
       }
     })
-    .then(like => {
-      like.destroy()
-        .then(like => {
-          return res.redirect('back')
-        })
-    })
+      .then(like => { 
+        like.destroy()
+          .then(like => {
+            return res.redirect('back')
+          })
+      })
   }
 
 }

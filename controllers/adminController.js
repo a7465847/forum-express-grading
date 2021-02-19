@@ -1,7 +1,6 @@
 const db = require('../models')
 const Restaurant = db.Restaurant
-const 
-Category = db.Category
+const Category = db.Category
 const User = db.User
 const imgur = require('imgur')
 // const imgur = require('imgur-node-api')

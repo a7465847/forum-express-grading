@@ -4,6 +4,7 @@ const Category = db.Category
 const Comment = db.Comment
 const User = db.User
 const pageLimit = 10
+const helpers = require('../_helpers')
 
 const restController = {
   getRestaurants: (req, res) => {
@@ -60,15 +61,14 @@ const restController = {
         { model: Comment, include: [User] }
       ]
     }).then(restaurant => {
+      const userId = helpers.getUser(req).id
       restaurant.increment('viewCounts')
-
-      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id) // 找出收藏此餐廳的 user
-      const isLike = restaurant.LikeUsers.map(d => d.id).includes(req.user.id) // 找出喜歡此餐廳的 user
-
+      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(userId)
+      const isLike = restaurant.LikeUsers.map(d => d.id).includes(userId) 
       return res.render('restaurant', {
         restaurant: restaurant.toJSON(),
-        isFavorited: isFavorited,  // 將資料傳到前端
-        isLike: isLike
+        isFavorited,
+        isLike
       })
     })
   },

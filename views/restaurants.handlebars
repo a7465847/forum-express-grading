@@ -37,9 +37,9 @@
         <div class="d-flex">
           {{#if this.isFavorited }}
           <form action="/favorite/{{this.id}}?_method=DELETE" method="POST"><button type="submit"
-          class="btn btn-danger">移除最愛</button></form>
+          class="btn btn-danger mr-3">移除最愛</button></form>
           {{else}}
-          <form action="/favorite/{{this.id}}" method="POST"><button type="submit" class="btn btn-primary">加到最愛</button>
+          <form action="/favorite/{{this.id}}" method="POST"><button type="submit" class="mr-3 btn btn-primary">加到最愛</button>
           </form>
           {{/if}}
 
