@@ -1,10 +1,8 @@
 const db = require('../models')
-const Restaurant = db.Restaurant
-const Category = db.Category
-const Comment = db.Comment
-const User = db.User
+const { Restaurant, Category, Comment, User } = db
 const pageLimit = 10
 const helpers = require('../_helpers')
+const sequelize = require('sequelize')
 
 const restController = {
   getRestaurants: (req, res) => {
@@ -56,7 +54,7 @@ const restController = {
     return Restaurant.findByPk(req.params.id, {
       include: [
         Category,
-        { model: User, as: 'FavoritedUsers' }, 
+        { model: User, as: 'FavoritedUsers' },
         { model: User, as: 'LikeUsers' },
         { model: Comment, include: [User] }
       ]
@@ -64,7 +62,7 @@ const restController = {
       const userId = helpers.getUser(req).id
       restaurant.increment('viewCounts')
       const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(userId)
-      const isLike = restaurant.LikeUsers.map(d => d.id).includes(userId) 
+      const isLike = restaurant.LikeUsers.map(d => d.id).includes(userId)
       return res.render('restaurant', {
         restaurant: restaurant.toJSON(),
         isFavorited,
@@ -104,6 +102,34 @@ const restController = {
     }).then(restaurant => {
       return res.render('dashboard', { restaurant: restaurant.toJSON() })
     })
+  },
+  getTopRestaurants: async (req, res) => {
+    const searchFavoritedRestaurants = helpers.getUser(req).FavoritedRestaurants
+    return await Restaurant.findAll({
+      attributes: {
+        include: [
+          [sequelize.literal('(SELECT COUNT(*) FROM Favorites WHERE Favorites.RestaurantId = Restaurant.id)'), 'FavoritedCount']
+        ]
+      },
+      order: [
+        [sequelize.literal('FavoritedCount'), 'DESC']
+      ],
+      raw: true,
+      nest: true,
+      limit: 10
+    })
+    .then(restaurant => {
+      restaurant = restaurant.map(restaurant => ({
+        ...restaurant,
+        description: restaurant.description.substring(0, 50),
+        isFavorited: searchFavoritedRestaurants.map(d => d.id).includes(restaurant.id)
+      }))
+      return res.render('topRestaurants', {
+        restaurant
+      })
+    })
+    
+
   }
 }
 
