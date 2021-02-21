@@ -60,6 +60,7 @@ const restController = {
       ]
     }).then(restaurant => {
       const userId = helpers.getUser(req).id
+      // 瀏覽次數 increment = UPDATE `Restaurants` SET `viewCounts`=`viewCounts`+ 1
       restaurant.increment('viewCounts')
       const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(userId)
       const isLike = restaurant.LikeUsers.map(d => d.id).includes(userId)

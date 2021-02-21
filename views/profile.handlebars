@@ -4,6 +4,10 @@
     <h3 class="my-name text-uppercase">{{ users.name }}</h3>
     <div class="experience text-mute">
       <h6>{{ users.email }}</h6>
+      <h6>{{restaurants.length}} 個已評論餐廳</h6>
+      <h6>{{users.FavoritedRestaurants.length}} 個已收藏餐廳</h6>
+      <h6>{{users.Followings.length}} 追蹤者</h6>
+      <h6>{{users.Followers.length}} 追隨者</h6>
       <a href="/users/{{users.id}}/edit" class="btn btn-link">
         Edit
       </a>
@@ -11,13 +15,51 @@
       </ul>
     </div>
   </div>
-
   <div class="card mt-3">
     <div class="card-header">
       {{ restaurants.length }}個 - 已評論餐廳
     </div>
     <div class="card-body">
       {{#each restaurants}}
+      <a href="/restaurants/{{this.id}}" class="btn btn-link">
+        <img src="{{ this.image }}" alt="Avatar" class="rounded float-left pr-3" style="width: 100px; height: 100px;">
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      {{ users.FavoritedRestaurants.length }}個 - 已收藏餐廳
+    </div>
+    <div class="card-body">
+      {{#each users.FavoritedRestaurants}}
+      <a href="/restaurants/{{this.id}}" class="btn btn-link">
+        <img src="{{ this.image }}" alt="Avatar" class="rounded float-left pr-3" style="width: 100px; height: 100px;">
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      {{ users.Followings.length }}個 - 追蹤
+    </div>
+    <div class="card-body">
+      {{#each users.Followings}}
+      <a href="/restaurants/{{this.id}}" class="btn btn-link">
+        <img src="{{ this.image }}" alt="Avatar" class="rounded float-left pr-3" style="width: 100px; height: 100px;">
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      {{ users.Followers.length }}個 - 追隨者
+    </div>
+    <div class="card-body">
+      {{#each users.Followers}}
       <a href="/restaurants/{{this.id}}" class="btn btn-link">
         <img src="{{ this.image }}" alt="Avatar" class="rounded float-left pr-3" style="width: 100px; height: 100px;">
       </a>
