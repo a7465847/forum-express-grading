@@ -29,13 +29,6 @@ const adminController = {
     adminService.getRestaurants(req, res, (data) => {
       return res.render('admin/restaurants', data)
     })
-    // return Restaurant.findAll({
-    //   raw: true,
-    //   nest: true,
-    //   include: [Category]
-    // }).then(restaurants => {
-    //   return res.render('admin/restaurants', { restaurants })
-    // })
   },
   // 進入新增資料頁面
   createRestaurant: (req, res) => {
@@ -91,14 +84,8 @@ const adminController = {
   },
   //進入瀏覽一筆資料頁面
   getRestaurant: (req, res) => {
-    return Restaurant.findByPk(
-      req.params.id, {
-      include: [Category]
-    }
-    ).then(restaurant => {
-      return res.render('admin/restaurant', {
-        restaurant: restaurant.toJSON()
-      })
+    adminService.getRestaurant(req, res, (data) => {
+      return res.render('admin/restaurant', data)
     })
   },
   // 進入編輯一筆資料頁面
