@@ -36,6 +36,6 @@ app.listen(port, () => {
   console.log(`Express is running on http://localhost:${port}`)
 })
 
-require('./routes')(app, passport)
+require('./routes')(app)
 
 module.exports = app
