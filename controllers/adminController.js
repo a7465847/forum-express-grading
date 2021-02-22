@@ -3,8 +3,9 @@ const Restaurant = db.Restaurant
 const Category = db.Category
 const User = db.User
 const imgur = require('imgur')
-// const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+
+const adminService = require('../services/adminService.js')
 
 const adminController = {
   // 進入管理員頁面
@@ -25,13 +26,16 @@ const adminController = {
   },
   // 瀏覽全部資料頁面
   getRestaurants: (req, res) => {
-    return Restaurant.findAll({
-      raw: true,
-      nest: true,
-      include: [Category]
-    }).then(restaurants => {
-      return res.render('admin/restaurants', { restaurants })
+    adminService.getRestaurants(req, res, (data) => {
+      return res.render('admin/restaurants', data)
     })
+    // return Restaurant.findAll({
+    //   raw: true,
+    //   nest: true,
+    //   include: [Category]
+    // }).then(restaurants => {
+    //   return res.render('admin/restaurants', { restaurants })
+    // })
   },
   // 進入新增資料頁面
   createRestaurant: (req, res) => {
