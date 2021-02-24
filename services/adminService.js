@@ -24,6 +24,7 @@ const adminService = {
           })
       })
   },
+  // 送出一筆新增資料
   postRestaurant: (req, res, callback) => {
     if (!req.body.name) {
       return callback({ status: 'error', message: "name didn't exist" })
@@ -59,6 +60,55 @@ const adminService = {
       }).then((restaurant) => {
         return callback({ status: 'success', message: 'restaurant was successfully created' })
       })
+    }
+  },
+  // 送出一筆編輯資料
+  putRestaurant: (req, res, callback) => {
+    if (!req.body.name) {
+      callback({ status: 'error', message: "name didn't exist" })
+    }
+
+    const { file } = req
+    if (file) {
+      imgur.setClientId(IMGUR_CLIENT_ID)
+      imgur.uploadFile(req.file.path)
+        .then(img => {
+          return Restaurant.findByPk(req.params.id)
+            .then((restaurant) => {
+              restaurant.update({
+                name: req.body.name,
+                tel: req.body.tel,
+                address: req.body.address,
+                opening_hours: req.body.opening_hours,
+                description: req.body.description,
+                image: file ? img.data.link : restaurant.image,
+                CategoryId: req.body.categoryId
+              })
+                .then((restaurant) => {
+                  callback({ status: 'success', message: 'restaurant was successfully to update' })
+                })
+                .catch((err) => {
+                  console.error('imgur upload failed', err.message);
+                })
+            })
+        })
+    }
+    else {
+      return Restaurant.findByPk(req.params.id)
+        .then((restaurant) => {
+          restaurant.update({
+            name: req.body.name,
+            tel: req.body.tel,
+            address: req.body.address,
+            opening_hours: req.body.opening_hours,
+            description: req.body.description,
+            image: restaurant.image,
+            CategoryId: req.body.categoryId
+          })
+            .then((restaurant) => {
+              callback({ status: 'success', message: 'restaurant was successfully to update' })
+            })
+        })
     }
   },
 }
